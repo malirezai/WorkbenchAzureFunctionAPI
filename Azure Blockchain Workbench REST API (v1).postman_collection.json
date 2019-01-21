@@ -1468,17 +1468,15 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "New user to add."
+							"raw": "{\n  \"externalID\": \"string\",\n  \"firstName\": \"string\",\n  \"lastName\": \"string\",\n  \"emailAddress\": \"string\"\n}"
 						},
 						"url": {
-							"raw": "http:///api/v1/users",
+							"raw": "https://{{baseURL}}/api/v1/users",
+							"protocol": "https",
 							"host": [
-								"http:"
+								"{{baseURL}}"
 							],
-							"port": "",
 							"path": [
-								"",
-								"",
 								"api",
 								"v1",
 								"users"
@@ -1618,7 +1616,7 @@
 	],
 	"variable": [
 		{
-			"id": "b22e69bd-6a5d-4234-a0bd-e51ec6e82ba2",
+			"id": "71a80d04-0b96-4758-a6eb-6083b59b3078",
 			"key": "baseURL",
 			"value": "",
 			"type": "string"
