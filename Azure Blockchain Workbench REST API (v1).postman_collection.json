@@ -1587,7 +1587,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Im5iQ3dXMTF3M1hrQi14VWFYd0tSU0xqTUhHUSIsImtpZCI6Im5iQ3dXMTF3M1hrQi14VWFYd0tSU0xqTUhHUSJ9.eyJhdWQiOiI0NWQ3NDczNi1lMWM2LTQxNTgtYTA5YS1kNTdmODQ3MjY5M2EiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9jNTk5NTE1NC0wNDY4LTQ3MzUtOGQ0Ni0zNDlhZGZkZTdkMDgvIiwiaWF0IjoxNTQ3ODM2MjcyLCJuYmYiOjE1NDc4MzYyNzIsImV4cCI6MTU0Nzg0MDE3MiwiYWlvIjoiQVdRQW0vOEtBQUFBTFMyVC90a0QxMWwwOEo4bHYySHI3RVBra29DZ0tnUDlnUTBxUGpxZFd4Tkkxak95bXlwQ0lGZWRHNTl6L014dFJzbDc2QVNDT2hhUitkTkVVd1JpeE03K3FudEk5NnlnV1NQd28zZWhaSHA4czNnQ0hBM1VGK2lxR3FHeEltRGciLCJhbXIiOlsicHdkIl0sImNfaGFzaCI6IjJLRmNKZEppUlIwSC1GRXllMHQ2WkEiLCJlbWFpbCI6Im1hYWxpcmV6QG1pY3Jvc29mdC5jb20iLCJmYW1pbHlfbmFtZSI6IkFsaXJlemFpZSIsImdpdmVuX25hbWUiOiJNYWhkaSIsImlkcCI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzcyZjk4OGJmLTg2ZjEtNDFhZi05MWFiLTJkN2NkMDExZGI0Ny8iLCJpbl9jb3JwIjoidHJ1ZSIsImlwYWRkciI6Ijk5LjIzOS45NS4xNjkiLCJuYW1lIjoiTWFoZGkgQWxpcmV6YWllIiwibm9uY2UiOiI5YmM2NTNhZC1jMTI1LTRkMmYtYTIwNi00ODBiNzdhZGVkNTYiLCJvaWQiOiIxOTBlZjM0ZC0xYTUzLTQ1YTgtYTVhZi04ZjUzODM4YmRjMjQiLCJyb2xlcyI6WyJBZG1pbmlzdHJhdG9yIl0sInN1YiI6IlgzT2RvRGtOWTZObXNudklRUG5GdjB4NTJEVzZMenpteU8xYW1aNkFveHciLCJ0aWQiOiJjNTk5NTE1NC0wNDY4LTQ3MzUtOGQ0Ni0zNDlhZGZkZTdkMDgiLCJ1bmlxdWVfbmFtZSI6Im1hYWxpcmV6QG1pY3Jvc29mdC5jb20iLCJ1dGkiOiJJQ1MzWkVyTHAwV3pjYzl1dDl4YUFBIiwidmVyIjoiMS4wIn0.h5XC2-JqDMhYMmooJ6CLlTTitR5jlLpjv9QO2aqo1f1m0mT3uBBD9Gf-t_F9sqX21zWA5965URLSoLuw4vbe2F9BjmNcuFn05u9MfABRHRc8FjgVaCYus0OrLw4lJ6T6lxW55zCc9GxhWHHTEO31dAc3X_K7BA1F7baXPsw2ry21rQaTbxgZg0sxa2x_CBBCGY3sXuJ6QUlMoXL_HGElzNBj1SG5aFPmSRLo5qR2xwFFpYE2M72VYXebSGm3oi2E37birRkE8TiVK05eYtwA4a9Pq8_1WL9Stw6big62NFHk-hpteDjo8lzSE_8BnoYCvyuv18L52jiLd76392Hw8Q",
+				"value": "{{currentAccessToken}}",
 				"type": "string"
 			}
 		]
@@ -1599,7 +1599,35 @@
 				"id": "f47a10a9-eff1-437f-981b-157f8e0e046a",
 				"type": "text/javascript",
 				"exec": [
-					""
+					"const echoPostRequest = { ",
+					"  method: 'POST',",
+					"  url: 'https://login.microsoftonline.com/{YOUR_TENANT_DOMAIN_NAME}/oauth2/token',",
+					"  headers: ",
+					"  { ",
+					"    'cache-control': 'no-cache',",
+					"    'Content-Type': 'application/x-www-form-urlencoded' ",
+					"  },",
+					"  body: ",
+					"  {",
+					"    mode: 'urlencoded',",
+					"    urlencoded: ",
+					"    [",
+					"        {key: \"resource\", value: \"{YOUR_WORKBENCH_APP_ID}\", disabled: false},",
+					"        {key: \"client_id\", value: \"{YOUR_API_APP_ID}\", disabled: false},",
+					"        {key: \"client_secret\", value: \"{YOUR_API_APPSECRET}\", disabled :false},",
+					"        {key: \"grant_type\", value: \"client_credentials\", disabled: false}",
+					"    ]",
+					"  }",
+					"};",
+					"",
+					"pm.sendRequest(echoPostRequest, function (err, res) {",
+					"    console.log(err ? err : res.json());",
+					"        if (err === null) {",
+					"            console.log('Saving the token and expiry date')",
+					"            var responseJson = res.json();",
+					"            pm.environment.set('currentAccessToken', responseJson.access_token)",
+					"        }",
+					"    });"
 				]
 			}
 		},
@@ -1616,8 +1644,14 @@
 	],
 	"variable": [
 		{
-			"id": "71a80d04-0b96-4758-a6eb-6083b59b3078",
+			"id": "3c990a17-63c3-4f72-9c37-75b71f4fc7c1",
 			"key": "baseURL",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "eebf2b84-45be-415f-8b22-8e26a4a35da9",
+			"key": "currentAccessToken",
 			"value": "",
 			"type": "string"
 		}
